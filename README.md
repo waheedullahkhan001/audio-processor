@@ -3,15 +3,9 @@ This is a simple program that uses the portaudio library to record audio from th
 # Requirements:
  - Portaudio library
 
-# Installation:
-Install C++ compiler and portaudio library. Then run the following command:
-```
-g++ main.cpp -o main.exe -lportaudio
-```
-
-## Setting up compiler in Windows:
+# Setting up compiler in Windows:
 - Install MSYS2 from https://www.msys2.org/
-- Install C++ compiler by running the following command in the MSYS2 MSYS terminal:
+- Install C++ compiler by running the following command in the MSYS2 UCRT64 terminal:
 ```
 pacman -S mingw-w64-ucrt-x86_64-gcc
 ```
@@ -19,8 +13,15 @@ pacman -S mingw-w64-ucrt-x86_64-gcc
 ```
 pacman -S mingw-w64-ucrt-x86_64-portaudio
 ```
-- Run the following command in the MSYS2 MSYS terminal to compile the program:
+- Run the following command in the MSYS2 UCRT64 terminal to compile the program:
 ```
-g++ main.cpp -o main.exe -lportaudio
+g++ audio.cpp -o audio.exe -lportaudio
 ```
-- You can also add the bin folder of the ucrt64 toolchain to environment variable PATH to run the program from anywhere. Which is this for my case: `C:\msys64\ucrt64\bin`
+You will also have to include some DLL files in the same folder as the executable. You can find them in the `C:\msys64\ucrt64\bin` folder. Copy the following files to the same folder as the executable:
+
+- libgcc_s_seh-1.dll
+- libstdc++-6.dll
+- libwinpthread-1.dll
+- portaudio_x64.dll
+
+> Note: You may want to add the bin folder of the ucrt64 toolchain to environment variable PATH to run the program from anywhere. Which is this in my case: `C:\msys64\ucrt64\bin`
