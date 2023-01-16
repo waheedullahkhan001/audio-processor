@@ -19,3 +19,8 @@ pacman -S mingw-w64-ucrt-x86_64-gcc
 ```
 pacman -S mingw-w64-ucrt-x86_64-portaudio
 ```
+- Run the following command in the MSYS2 MSYS terminal to compile the program:
+```
+g++ main.cpp -o main.exe -lportaudio
+```
+- You can also add the bin folder of the ucrt64 toolchain to environment variable PATH to run the program from anywhere. Which is this for my case: `C:\msys64\ucrt64\bin`
