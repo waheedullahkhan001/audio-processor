@@ -10,7 +10,7 @@ g++ main.cpp -o main.exe -lportaudio
 ```
 
 ## Setting up compiler in Windows:
-- Install MySys2 from https://www.msys2.org/
+- Install MSYS2 from https://www.msys2.org/
 - Install C++ compiler by running the following command in the MSYS2 MSYS terminal:
 ```
 pacman -S mingw-w64-ucrt-x86_64-gcc
