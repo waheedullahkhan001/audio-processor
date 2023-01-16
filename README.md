@@ -24,4 +24,4 @@ You will also have to include some DLL files in the same folder as the executabl
 - libwinpthread-1.dll
 - portaudio_x64.dll
 
-> Note: You may want to add the bin folder of the ucrt64 toolchain to environment variable PATH to run the program from anywhere. Which is this in my case: `C:\msys64\ucrt64\bin`
+> **Note:** You may want to add the bin folder of the ucrt64 toolchain to environment variable PATH to run the program from anywhere. Which is this in my case: `C:\msys64\ucrt64\bin`
