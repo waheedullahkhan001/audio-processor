@@ -33,7 +33,7 @@ void setParams(PaStreamParameters *inputParameters, PaStreamParameters *outputPa
 int getSampleRate(PaStreamParameters *inputParameters, PaStreamParameters *outputParameters) {
     int sampleRate = 44100;
 
-    for(int i = 48000; i >= 1; i--) {
+    for(int i = MAX_SAMPLE_RATE; i >= 1; i--) {
         if(Pa_IsFormatSupported(inputParameters, outputParameters, i) == paFormatIsSupported) {
             sampleRate = i;
             break;
