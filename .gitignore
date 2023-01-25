@@ -1,3 +1,4 @@
-audio.exe
-build
+*.exe
+*.wav
 .vscode
+test.cpp
