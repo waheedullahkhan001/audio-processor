@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include <portaudio.h>
 #include "audio.h"
 #include "autil.h"
@@ -57,9 +58,9 @@ int main()
     
     while (volumeMultiplier > 0)
     {
-        cout << "Enter volume multiplier value (0 to exit): ";
-        cin >> volumeMultiplier;
         cout << "Setting volume multiplier to " << volumeMultiplier << endl;
+        cout << "You can new volume multiplier value (enter 0 to exit): ";
+        cin >> volumeMultiplier;
     }
     
 
