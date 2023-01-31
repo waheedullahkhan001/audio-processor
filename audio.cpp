@@ -1,5 +1,4 @@
 #include <iostream>
-#include <limits>
 #include <portaudio.h>
 #include <soundtouch/SoundTouch.h>
 #include "audio.h"
