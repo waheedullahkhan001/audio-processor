@@ -1,4 +1,5 @@
 *.exe
 *.wav
+*.zip
 .vscode
 test.cpp

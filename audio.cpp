@@ -1,33 +1,48 @@
 #include <iostream>
 #include <limits>
 #include <portaudio.h>
+#include <soundtouch/SoundTouch.h>
 #include "audio.h"
 #include "autil.h"
 
 
 using namespace std;
+using namespace soundtouch;
 
 
-float volumeMultiplier = 1;
+SoundTouch soundTouch;
+
+float pitchSemiTones   = -16;
+float volumeMultiplier = 1.3;
 
 
-int audioCallback(const void *inputBuffer, void *outputBuffer,
-                  unsigned long framesPerBuffer,
-                  const PaStreamCallbackTimeInfo* timeInfo,
-                  PaStreamCallbackFlags statusFlags,
-                  void *paData)
+int audioCallback(
+                    const void                     *inputBuffer,
+                    void                           *outputBuffer,
+                    unsigned long                   framesPerBuffer,
+                    const PaStreamCallbackTimeInfo *timeInfo,
+                    PaStreamCallbackFlags           statusFlags,
+                    void                           *paData
+                )
 {
-    unsigned int i, j;
-    float *in = (float*)inputBuffer;
-    float *out = (float*)outputBuffer;
-    PaData *data = (PaData*)paData;
+    float  *in       = (float* ) inputBuffer;
+    float  *out      = (float* ) outputBuffer;
+    PaData *userData = (PaData*) paData;
 
-    for (i = 1; i <= framesPerBuffer; i++)
+    soundTouch.setSampleRate(1); // I found this to be working the best.
+    soundTouch.setChannels(userData->channelCount);
+    soundTouch.setPitchSemiTones(pitchSemiTones);
+
+    soundTouch.putSamples(in, framesPerBuffer);
+    soundTouch.receiveSamples(out, soundTouch.numSamples());
+
+    for (int i = 0; i < soundTouch.numSamples(); i++)
     {
-        for (j = 1; j <= data->channelCount; j++)
+        for (int j = 0; j < userData->channelCount; j++)
         {
-            *out++ = *in++ * (volumeMultiplier);
+            *out++ = *out * volumeMultiplier;
         }
+        
     }
 
     return 0;
@@ -37,30 +52,68 @@ int audioCallback(const void *inputBuffer, void *outputBuffer,
 int main()
 {
     PaStream *stream;
-    PaData data;
+    PaData    data;
     PaStreamParameters inputParameters, outputParameters;
-    int inputDevice, outputDevice, channelCount, sampleRate;
+    int inputDevice, outputDevice, channelCount, sampleRate, choice;
 
     
     Pa_Initialize();
 
-    inputDevice = Pa_GetDefaultInputDevice();
+    inputDevice  = Pa_GetDefaultInputDevice();
     outputDevice = Pa_GetDefaultOutputDevice();
     channelCount = getChannelCount(inputDevice, outputDevice);
-    setParams(&inputParameters, &outputParameters, inputDevice, outputDevice, channelCount);
-    sampleRate = getSampleRate(&inputParameters, &outputParameters);
+    sampleRate   = getSampleRate(&inputParameters, &outputParameters);
 
     data.channelCount = channelCount;
 
-    Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, paFramesPerBufferUnspecified, paNoFlag, audioCallback, &data);
+    setParams(
+        &inputParameters, 
+        &outputParameters, 
+        inputDevice, 
+        outputDevice, 
+        data.channelCount
+    );
+
+    Pa_OpenStream(
+        &stream, 
+        &inputParameters, 
+        &outputParameters, 
+        sampleRate, 
+        paFramesPerBufferUnspecified, 
+        paNoFlag, audioCallback, 
+        &data
+    );
     Pa_StartStream(stream);
 
     
     while (volumeMultiplier > 0)
     {
-        cout << "Setting volume multiplier to " << volumeMultiplier << endl;
-        cout << "You can new volume multiplier value (enter 0 to exit): ";
-        cin >> volumeMultiplier;
+        cout << "0. Exit.\n";
+        cout << "1. Volume Multiplier (Current: " << volumeMultiplier << ")\n";
+        cout << "2. Pitch (in Semitones) (Current: " << pitchSemiTones << ")\n";
+        cout << "^\tEnter your choice: ";
+        cin  >> choice;
+
+        if (choice == 0)
+        {
+            cout << "Exiting...\n";
+            break;
+        }
+        else if (choice == 1)
+        {
+            cout << "Enter new value for volume multiplier: ";
+            cin >> volumeMultiplier;
+        }
+        else if (choice == 2)
+        {
+            cout << "Enter new value for pitch: ";
+            cin >> pitchSemiTones;
+        }
+        else
+        {
+            cout << "Please select a valid option." << endl;
+        }
+        
     }
     
 
